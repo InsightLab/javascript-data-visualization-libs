@@ -83,6 +83,37 @@ https://vasturiano.github.io/react-force-graph/example/bloom-effect/
 
 <br/>
 
+Diagrams and Graph editor
+=========================
+
+### React Flow
+Library for building node-based editors and diagrams.  
+https://reactflow.dev  
+https://github.com/wbkd/react-flow
+
+### react-digraph
+Create a directed graph editor without implementing any of the SVG drawing or event handling logic.  
+https://github.com/uber/react-digraph
+
+### AntV X6
+JavaScript Diagramming library that uses SVG and HTML for rendering.  
+Flowchart, Directed Acyclic Graph, Entity Relationship Diagram.  
+https://x6.antv.vision/apps/draw/  
+https://github.com/antvis/X6/blob/master/README.en-us.md
+
+### AntV G6
+A graph visualization engine. G6 concentrates on the principle of "good by default".  
+https://g6.antv.vision/en/docs/manual/tutorial/preface  
+https://github.com/antvis/g6
+
+### AntV Graphin
+A React toolkit for graph analysis based on G6 that focuses on relational visual analysis.  
+https://graphin.antv.vision/en-US  
+https://github.com/antvis/graphin/
+
+
+<br/>
+
 Charts by command-line
 ============
 
