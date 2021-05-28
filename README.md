@@ -80,3 +80,35 @@ React bindings for the force-graph suite libraries:
 https://github.com/vasturiano/react-force-graph  
 https://vasturiano.github.io/react-force-graph/example/bloom-effect/
 
+
+<br/>
+
+Charts by command-line
+============
+
+### Vega
+A visualization grammar for web and command line interface.  
+https://vega.github.io/vega/
+
+With Vega, you can describe the visual appearance and interactive behavior of a visualization in a JSON format.
+```json
+{
+    "$schema": "https://vega.github.io/schema/vega/v5.json",
+    "description": "A basic chart",
+    "width": 500,
+    "height": 300,
+    "padding": 10,
+    "scales": [
+        {"name": "xcale", "type": "linear", "range": "... etc."}
+    ],
+    "data": ["... etc."]
+}
+```
+
+The library includes three node.js-based command line utilities - **vg2png**, **vg2svg** and **vg2pdf**
+```bash
+$ npm install -g vega-cli
+$ vg2png vega-chart.json out.png
+```
+
+<br/>
