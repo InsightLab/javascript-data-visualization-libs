@@ -1,6 +1,121 @@
 
 <br/>
 
+D3.js
+===================
+
+Probably the most popular interactive DataViz library helping us to bring data to life using HTML, SVG, and CSS.  
+It's a solid and low-level data visualization library, being used as a core of the many others libraries.  
+The D3 team/community has published hundreds of examples and tutorials over the last 10 years (you are not alone!)  
+https://d3js.org  
+https://observablehq.com/@d3/gallery
+
+React.js is a great library for developing web applications.  
+D3 and React should be a pretty good choice to create a rich user interface for data visualization.  
+There some options to integrate a D3.js chart within a React component without start a fight to control the DOM.  
+Of course, each approach has both its own positive and negative side.
+
+### D3 within a React component
+This method is probably the most popular and simple way to integrate D3 within a React component.  
+D3.js controls the DOM, but the mix with React code is not so good when the component becomes bigger.  
+```javascript
+import { useEffect, useRef } from "react"
+import * as d3 from "d3"
+
+export function BarChart({ data }) {
+    const containerRef = useRef()
+    
+    useEffect(() => {
+        const svg = d3.select(containerRef.current)
+        svg.attr("viewBox", "0 0 100 100")
+        const g = svg.append("g").attr("class", "group-bars")
+        // ...
+        g.select("rect.bar").on("click", event => { /* ... */ })
+        // ...
+    }, [data])
+
+    return <div ref={ containerRef } />
+}
+```
+
+### D3 chart on Facade Pattern
+We can encapsulate our D3.js chart and export a few methods with a simple API.  
+This method focuses on a clear separation between D3 and React code.  
+Maintenance will be easier, flexible to use in another framework, and reuse community examples should be easier too.  
+All D3.js features remain intact to use, but we need a well-defined interface to communicate.
+
+```javascript
+// only D3.js code (React is not allowed here)
+import * as d3 from "d3"
+
+export function createLineChart(container, data, options) {
+    const svg = d3.select(container).append("svg")
+    svg.attr("viewBox", "0 0 100 100")
+    const g = svg.append("g")
+    // ...
+    g.select("path.line").on("click", onClick)
+    // ...
+    return {
+        update: data => { /* update chart... */ },
+        remove: () => { /* remove all subscription listeners... */ }
+    }
+}
+```
+```javascript
+// only React code (D3 is not allowed here)
+import { useEffect, useRef } from "react"
+import { createLineChart } from "./createLineChart.js"
+
+export function LineChartComponent({ data }) {
+    const containerRef = useRef()
+    const chartRef = useRef()
+
+    useEffect(() => {
+        if (!chartRef.current) {
+            chartRef.current = createLineChart(containerRef.current, data)
+        } else {
+            chartRef.current.update(data)
+        }
+    }, [data])
+
+    useEffect(() => {
+        return () => chartRef.current.remove()
+    }, [])
+
+    return <div ref={ containerRef } />
+}
+```
+
+### D3 for Math, React for the DOM
+In this method, we use D3 as a simple utility library to generate scales, layouts, SVG paths, etc and React to manage the DOM.  
+React developers will be happy but at the same time, they will need to reimplement/adapt D3 code to React way.  
+D3 transitions should be replaced too by another library as react-spring, for example.
+```javascript
+import { useEffect, useRef } from "react"
+import * as d3 from "d3"
+
+export function LineChart({ data }) {
+    const xScale = d3.scaleTime().domain // .domain(d3.max(data, ...
+    const yScale = d3.scaleLinear().domain // ...
+
+    const line = d3.line().x(d => xScale(d.date)) // ...
+    const linePath = line(data)
+
+    const clickHandler = () => {
+        console.log("line clicked")
+    }
+
+    return (
+        <svg width={ 300 } height={ 200 } viewBox="0 0 100 100">
+            <path className="line" d={ linePath } onClick={ clickHandler } />
+        </svg>
+    )
+}
+```
+
+
+<br/>
+
 Libs based on D3.js
 ===================
 
