@@ -48,12 +48,15 @@ All D3.js features remain intact to use, but we need a well-defined interface to
 // only D3.js code (React is not allowed here)
 import * as d3 from "d3"
 
-export function createLineChart(container, data, options) {
+export function createLineChart(container, data, options={}) {
     const svg = d3.select(container).append("svg")
     svg.attr("viewBox", "0 0 100 100")
     const g = svg.append("g")
     // ...
-    g.select("path.line").on("click", onClick)
+    g.select("path.line").on("click", line => {
+        if (options.onClick)
+            options.onClick(line)
+    })
     // ...
     return {
         update: data => { /* update chart... */ },
@@ -72,7 +75,9 @@ export function LineChartComponent({ data }) {
 
     useEffect(() => {
         if (!chartRef.current) {
-            chartRef.current = createLineChart(containerRef.current, data)
+            chartRef.current = createLineChart(containerRef.current, data, {
+                onClick: lineClicked => { /* sync D3 events with React... */ },
+            })
         } else {
             chartRef.current.update(data)
         }
